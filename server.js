@@ -25,7 +25,7 @@ app.get("/api/products-json", (req, res) => {
             "id":1,
             "name":"Standard Card Set",
             "price":"$6.99",
-            "img_name":"/images/store-products/BicycleCardSet.png",
+            "img_name":"/images/BicycleCardSet.png",
             "contains":"",
             "description":""
         },
@@ -33,7 +33,7 @@ app.get("/api/products-json", (req, res) => {
             "id":2,
             "name":"Layered Chess Set",
             "price":"$44.99",
-            "img_name":"/images/store-products/FunkyChessSet.png",
+            "img_name":"/images/FunkyChessSet.png",
             "contains":"",
             "description":""
         },
@@ -41,7 +41,7 @@ app.get("/api/products-json", (req, res) => {
             "id":3,
             "name":"Set of 8 Puzzles",
             "price":"$25.99",
-            "img_name":"/images/store-products/SetOfEightPuzzles.jpeg",
+            "img_name":"/images/SetOfEightPuzzles.jpeg",
             "contains":"",
             "description":""
         },
@@ -49,7 +49,7 @@ app.get("/api/products-json", (req, res) => {
             "id":4,
             "name":"White Dice Set",
             "price":"$13.99",
-            "img_name":"/images/store-products/DiceSet.png",
+            "img_name":"/images/DiceSet.png",
             "contains":"",
             "description":""
         }, 
@@ -57,7 +57,7 @@ app.get("/api/products-json", (req, res) => {
             "id":5,
             "name":"Medieval Chess Set",
             "price":"$49.99",
-            "img_name":"/images/store-products/MedievalChessSet.png",
+            "img_name":"/images/MedievalChessSet.png",
             "contains":"",
             "description":""
         }, 
@@ -65,7 +65,7 @@ app.get("/api/products-json", (req, res) => {
             "id":6,
             "name":"VR Headset",
             "price":"$199.99",
-            "img_name":"/images/store-products/VirtualHeadset.png",
+            "img_name":"/images/VirtualHeadset.png",
             "contains":"",
             "description":""
         }, 
@@ -73,7 +73,7 @@ app.get("/api/products-json", (req, res) => {
             "id":7,
             "name":"Dominos",
             "price":"$15.99",
-            "img_name":"/images/store-products/Dominos.png",
+            "img_name":"/images/Dominos.png",
             "contains":"",
             "description":""
         },
@@ -81,7 +81,7 @@ app.get("/api/products-json", (req, res) => {
             "id":8,
             "name":"Red Dice Set",
             "price":"$13.99",
-            "img_name":"/images/store-products/RedDiceSet.png",
+            "img_name":"/images/RedDiceSet.png",
             "contains":"",
             "description":""
         },  
@@ -89,7 +89,7 @@ app.get("/api/products-json", (req, res) => {
             "id":9,
             "name":"Monopoly",
             "price":"$24.99",
-            "img_name":"/images/store-products/Monopoly.png",
+            "img_name":"/images/Monopoly.png",
             "contains":"",
             "description":""
         }    
