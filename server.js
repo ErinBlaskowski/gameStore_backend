@@ -98,6 +98,68 @@ app.get("/api/products-json", (req, res) => {
     res.send(products);
 });
 
+app.post("/api/store", upload.single("img_name"), (req, res)=>{
+
+    const result = validateProduct(req.body);
+
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+
+  const product = {
+    _id: product.length + 1,
+    name: req.body.name,
+    price: req.body.size,
+  };
+
+  if (req.file) {
+    product.main_image = "images/" + req.file.filename;
+  }
+
+  products.push(product);
+  res.status(200).send(product);
+})
+
+app.put("/api/products/id", upload.single("img_name"), (req, res)=>{
+    const prod = products.find((product)=>house._id===parseInt(req.params.id));
+
+    if(!prod){
+        res.status(404).send("The product with the provided ID was not found.");
+        return;
+    }
+
+    const result = validateProduct(req.body);
+
+    if(result)
+
+    prod.name = req.body.name;
+    prod.price = req.body.price;
+
+    if(req.file){
+        prod.main_image = req.file.filename;
+    }
+
+    req.status(200).send(prod);
+});
+
+app.delete("/api/products/:id", (req, res)=>{
+    const prod = products.find((product)=>house._id===parseInt(req.params.id));
+
+    if(!prod){
+        res.status(404).send("The product with the provided ID was not found.");
+        return;
+    }
+
+    
+});
+
+const validateProduct = (product) => {
+    const schema = Joi.object({
+        id:Joi.allow("");
+    });
+}
+
 app.listen(3000, () => {
     console.log("I'm listening");
 });
