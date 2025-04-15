@@ -151,12 +151,12 @@ app.delete("/api/products/:id", (req, res)=>{
         return;
     }
 
-    
+
 });
 
 const validateProduct = (product) => {
     const schema = Joi.object({
-        id:Joi.allow("");
+        id:Joi.allow("")
     });
 }
 
