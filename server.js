@@ -1,7 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const Joi = require("joi");
+const multer = require("multer");
 app.use(express.static("public"));
+app.use("/uploads", express.static("uploads"));
+app.use(express.json());
 app.use(cors());
 
 app.get('/',(req, res) => {
