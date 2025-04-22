@@ -33,7 +33,7 @@ mongoose
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
-  img: String,
+  img_name: String,
 });
 
 const Product = mongoose.model("Product", productSchema);
@@ -126,9 +126,9 @@ app.get("/api/store", async (req, res) => {
 });
 
 app.get("/api/store/:id", async (req, res) => {
-    const product = await Product.findOne({ _id: id });
+    const product = await Product.findOne({ _id: req.params.id });
     res.send(product);
-  });
+});
 
 app.post("/api/store", upload.single("img"), async (req, res)=>{
     
@@ -140,7 +140,6 @@ app.post("/api/store", upload.single("img"), async (req, res)=>{
   }
 
   const product = new Product({
-    _id: products.length,
     name: req.body.name,
     price: req.body.price,
   });
@@ -158,6 +157,7 @@ app.post("/api/store", upload.single("img"), async (req, res)=>{
 })
 
 app.put("/api/store/:id", upload.single("img"), async (req, res) => {
+    
     const result = validateProduct(req.body);
   
     if (result.error) {
@@ -171,7 +171,7 @@ app.put("/api/store/:id", upload.single("img"), async (req, res) => {
     };
   
     if (req.file) {
-      fieldsToUpdate.img_name = "images/" + req.file.filename;
+      fieldsToUpdate.img_name = "/images/" + req.file.filename;
     }
   
     const wentThrough = await Product.updateOne(
