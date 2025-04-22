@@ -137,15 +137,15 @@ app.post("/api/store", upload.single("img"), async (req, res)=>{
     return;
   }
 
-  const product = {
+  const product = new Product({
     _id: products.length,
     name: req.body.name,
     price: req.body.price,
-  };
+  });
 
   if (req.file) {
     product.img_name = "/images/" + req.file.filename;
-  }
+  };
 
   /*
   products.push(product);
