@@ -33,7 +33,7 @@ mongoose
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
-  img: String
+  img: String,
 });
 
 const Product = mongoose.model("Product", productSchema);
@@ -118,12 +118,14 @@ const products = [
     }    
 ] */
 
-app.get("/api/products-json", async (req, res) => {
+
+// Help with paths!?!?
+app.get("/api/store", async (req, res) => {
     const products = await Product.find();
     res.send(products);
 });
 
-app.get("/api/products/:id", async (req, res) => {
+app.get("/api/store/:id", async (req, res) => {
     const product = await Product.findOne({ _id: id });
     res.send(product);
   });
@@ -169,29 +171,22 @@ app.put("/api/store/:id", upload.single("img"), async (req, res) => {
     };
   
     if (req.file) {
-      fieldsToUpdate.img = "images/" + req.file.filename;
+      fieldsToUpdate.img_name = "images/" + req.file.filename;
     }
   
     const wentThrough = await Product.updateOne(
-      { _id: req.params.id },
+      { _id: req.params.id},
       fieldsToUpdate
     );
   
-    const updatedProduct = await Product.findOne({ _id: req.params.id });
+    const updatedProduct = await Product.findOne({_id: req.params.id});
     res.send(updatedProduct);
   });
 
-app.delete("/api/products/:id", (req, res) => {
-    const product = products.find((h) => h._id === parseInt(req.params.id));
-  
-    if (!product) {
-      res.status(404).send("The product with the given id was not found");
-    }
-  
-    const index = products.indexOf(product);
-    products.splice(index, 1);
-    res.send(product);
-});
+  app.delete("/api/store/:id", async (req, res) => {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    res.status(200).send(product);
+  });
   
 const validateProduct = (product) => {
     const schema = Joi.object({
