@@ -33,7 +33,7 @@ mongoose
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
-  img: String,
+  img: String
 });
 
 const Product = mongoose.model("Product", productSchema);
@@ -42,18 +42,7 @@ app.get('/',(req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-app.get("/api/iframe-json", (req, res) => {
-    const iframe = [
-        {
-            "id":1,
-            "name":"D&D in 5 Minutes",
-            "url":"https://www.youtube.com/embed/BgvHNlgmKro?si=sX8OzWESY8ovoN__",
-            "img_name":"/images/store-products/BicycleCardSet.png"  
-        }
-    ]
-    res.send(iframe);
-});
-
+/*
 const products = [
     {
         "id":1,
@@ -127,13 +116,19 @@ const products = [
         "contains":"",
         "description":""
     }    
-]
+] */
 
-app.get("/api/products-json", (req, res) => {
+app.get("/api/products-json", async (req, res) => {
+    const products = await Product.find();
     res.send(products);
 });
 
-app.post("/api/store", upload.single("img"), (req, res)=>{
+app.get("/api/products/:id", async (req, res) => {
+    const product = await Product.findOne({ _id: id });
+    res.send(product);
+  });
+
+app.post("/api/store", upload.single("img"), async (req, res)=>{
     
     const result = validateProduct(req.body);
 
@@ -152,31 +147,39 @@ app.post("/api/store", upload.single("img"), (req, res)=>{
     product.img_name = "/images/" + req.file.filename;
   }
 
+  /*
   products.push(product);
   res.status(200).send(product);
+  */
+  const newProduct = await product.save();
+  res.send(newProduct);
 })
 
-app.put("/api/products/id", upload.single("img_name"), (req, res)=>{
-    const prod = products.find((product)=>product._id===parseInt(req.params.id));
-
-    if(!prod){
-        res.status(404).send("The product with the provided ID was not found.");
-        return;
-    }
-
+app.put("/api/store/:id", upload.single("img"), async (req, res) => {
     const result = validateProduct(req.body);
-
-    if(result)
-
-    prod.name = req.body.name;
-    prod.price = req.body.price;
-
-    if(req.file){
-        prod.main_image = req.file.filename;
+  
+    if (result.error) {
+      res.status(400).send(result.error.details[0].message);
+      return;
     }
-
-    req.status(200).send(prod);
-});
+  
+    let fieldsToUpdate = {
+      name: req.body.name,
+      price: req.body.price,
+    };
+  
+    if (req.file) {
+      fieldsToUpdate.img = "images/" + req.file.filename;
+    }
+  
+    const wentThrough = await Product.updateOne(
+      { _id: req.params.id },
+      fieldsToUpdate
+    );
+  
+    const updatedProduct = await Product.findOne({ _id: req.params.id });
+    res.send(updatedProduct);
+  });
 
 app.delete("/api/products/:id", (req, res) => {
     const product = products.find((h) => h._id === parseInt(req.params.id));
