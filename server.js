@@ -7,6 +7,7 @@ app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
+const mongoose = require("mongoose");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -17,7 +18,25 @@ const storage = multer.diskStorage({
     },
   });
   
-  const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
+
+mongoose
+  .connect(
+    "mongodb+srv://erinblask:fAOoIxoTps2MsFtI@cluster1.cqwhhxc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1"
+  )
+  .then(() => {
+    console.log("connected to mongodb");
+  })
+  .catch((error) => {
+    console.log("couldn't connect to mongodb", error);
+  });
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  img: String,
+});
+
+const Product = mongoose.model("Product", productSchema);
 
 app.get('/',(req, res) => {
     res.sendFile(__dirname + "/index.html");
@@ -126,7 +145,7 @@ app.post("/api/store", upload.single("img"), (req, res)=>{
   const product = {
     _id: products.length,
     name: req.body.name,
-    price: req.body.size,
+    price: req.body.price,
   };
 
   if (req.file) {
@@ -138,7 +157,7 @@ app.post("/api/store", upload.single("img"), (req, res)=>{
 })
 
 app.put("/api/products/id", upload.single("img_name"), (req, res)=>{
-    const prod = products.find((product)=>house._id===parseInt(req.params.id));
+    const prod = products.find((product)=>product._id===parseInt(req.params.id));
 
     if(!prod){
         res.status(404).send("The product with the provided ID was not found.");
@@ -159,27 +178,28 @@ app.put("/api/products/id", upload.single("img_name"), (req, res)=>{
     req.status(200).send(prod);
 });
 
-app.delete("/api/products/:id", (req, res)=>{
-    const prod = products.find((product)=>house._id===parseInt(req.params.id));
-
-    if(!prod){
-        res.status(404).send("The product with the provided ID was not found.");
-        return;
+app.delete("/api/products/:id", (req, res) => {
+    const product = products.find((h) => h._id === parseInt(req.params.id));
+  
+    if (!product) {
+      res.status(404).send("The product with the given id was not found");
     }
-
-
+  
+    const index = products.indexOf(product);
+    products.splice(index, 1);
+    res.send(product);
 });
-
+  
 const validateProduct = (product) => {
     const schema = Joi.object({
-        id:Joi.allow(""),
-        name:Joi.allow(""),
-        price:Joi.allow("")
+      _id: Joi.allow(""),
+      name: Joi.string().min(3).required(),
+      price: Joi.number().required(),
     });
-
+  
     return schema.validate(product);
-}
-
+};
+  
 app.listen(3000, () => {
     console.log("I'm listening");
 });
